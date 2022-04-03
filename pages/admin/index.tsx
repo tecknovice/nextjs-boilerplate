@@ -1,11 +1,11 @@
 import type { ReactElement } from 'react'
 import Typography from '@mui/material/Typography'
-import ClientLayout from '../layouts/client.layout'
+import AdminLayout from '../../layouts/admin.layout'
 
 export default function Index() {
-  return <Typography align="center">Client</Typography>
+  return <Typography align="center">Admin Dashboard</Typography>
 }
 
 Index.getLayout = function getLayout(page: ReactElement) {
-  return <ClientLayout>{page}</ClientLayout>
+  return <AdminLayout>{page}</AdminLayout>
 }
