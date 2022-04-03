@@ -27,6 +27,7 @@ import BarChartIcon from '@mui/icons-material/BarChart'
 import LayersIcon from '@mui/icons-material/Layers'
 import { useRouter } from 'next/router'
 import useUser from '../hooks/useUser'
+import { StateContext } from '../store/context'
 
 const drawerWidth = 240
 
@@ -120,11 +121,11 @@ interface AdminProps {
 function AdminLayout(props: AdminProps) {
   const router = useRouter()
 
-  const { loading, user, error } = useUser()
-
+  const { user } = React.useContext(StateContext)
+  // if (!user) router.push('/signin')
   React.useEffect(() => {
-    if (loading === false && !user) router.push('/signin')
-  }, [loading, user])
+    if (!user) router.push('/signin')
+  }, [])
 
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
@@ -144,12 +145,12 @@ function AdminLayout(props: AdminProps) {
   const openPopover = Boolean(anchorEl)
   const id = openPopover ? 'simple-popover' : undefined
 
-  if (loading || error)
-    return (
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <CircularProgress />
-      </Box>
-    )
+  // if (loading || error)
+  //   return (
+  //     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+  //       <CircularProgress />
+  //     </Box>
+  //   )
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="absolute" open={open}>

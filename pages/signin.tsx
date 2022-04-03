@@ -9,10 +9,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import Copyright from '../components/copyright'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import httpClient from '../lib/httpclient'
 import Alert from '@mui/material/Alert'
 import { useRouter } from 'next/router'
+import { StateContext } from '../store/context'
 
 interface Token {
   access_token: string
@@ -21,6 +22,8 @@ interface Token {
 function SignIn() {
   const router = useRouter()
 
+  const { user } = useContext(StateContext)
+  console.log(user);
   const [credential, setCredential] = useState({
     email: '',
     password: '',
@@ -33,19 +36,8 @@ function SignIn() {
   })
 
   useEffect(() => {
-    try {
-      const jwt = localStorage.getItem('jwt')
-      //   if (jwt) {
-      //     const decodedToken = jwtDecode<JwtPayload>(jwt)
-      //     const currentTimeStamp = Math.floor(new Date().getTime() / 1000)
-      //     if (decodedToken.exp && decodedToken.exp > currentTimeStamp) {
-      //       navigate('/admin')
-      //     }
-      //   }
-    } catch (error) {
-      console.error(error)
-    }
-  })
+    if (user) router.push('/admin')
+  }, [user])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
