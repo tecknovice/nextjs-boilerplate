@@ -5,12 +5,8 @@ import type { AppProps } from 'next/app'
 import axios from 'axios'
 import useUser from '../hooks/useUser'
 
+console.log('_app.tsx')
 axios.defaults.baseURL = 'http://localhost:3001'
-
-if (typeof window !== 'undefined') {
-  const jwt = localStorage.getItem('jwt')
-  axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`
-}
 
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -21,7 +17,13 @@ type AppPropsWithLayout = AppProps & {
 }
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  console.log('myapp')
   useUser()
+  if (typeof window !== 'undefined') {
+    const jwt = localStorage.getItem('jwt')
+    if (jwt) axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`
+  }
+
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page)
 
