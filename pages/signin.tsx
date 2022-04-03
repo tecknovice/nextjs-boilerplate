@@ -35,13 +35,13 @@ function SignIn() {
   useEffect(() => {
     try {
       const jwt = localStorage.getItem('jwt')
-    //   if (jwt) {
-    //     const decodedToken = jwtDecode<JwtPayload>(jwt)
-    //     const currentTimeStamp = Math.floor(new Date().getTime() / 1000)
-    //     if (decodedToken.exp && decodedToken.exp > currentTimeStamp) {
-    //       navigate('/admin')
-    //     }
-    //   }
+      //   if (jwt) {
+      //     const decodedToken = jwtDecode<JwtPayload>(jwt)
+      //     const currentTimeStamp = Math.floor(new Date().getTime() / 1000)
+      //     if (decodedToken.exp && decodedToken.exp > currentTimeStamp) {
+      //       navigate('/admin')
+      //     }
+      //   }
     } catch (error) {
       console.error(error)
     }

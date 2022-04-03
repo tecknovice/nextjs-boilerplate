@@ -15,7 +15,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import NotificationsIcon from '@mui/icons-material/Notifications'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import Copyright from '../components/copyright'
-import { Button, Popover } from '@mui/material'
+import { Button, CircularProgress, Popover } from '@mui/material'
 
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -25,6 +25,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import PeopleIcon from '@mui/icons-material/People'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import LayersIcon from '@mui/icons-material/Layers'
+import { useRouter } from 'next/router'
+import useUser from '../hooks/useUser'
 
 const drawerWidth = 240
 
@@ -116,6 +118,14 @@ interface AdminProps {
 }
 
 function AdminLayout(props: AdminProps) {
+  const router = useRouter()
+
+  const { loading, user, error } = useUser()
+
+  React.useEffect(() => {
+    if (loading === false && !user) router.push('/signin')
+  }, [loading, user])
+
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
@@ -134,6 +144,12 @@ function AdminLayout(props: AdminProps) {
   const openPopover = Boolean(anchorEl)
   const id = openPopover ? 'simple-popover' : undefined
 
+  if (loading || error)
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    )
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="absolute" open={open}>
