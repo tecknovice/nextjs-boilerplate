@@ -1,5 +1,5 @@
-import { State } from "../interfaces/state.interface";
+import { State } from '../interfaces/state.interface'
 
-export const initialState : State= {
+export const initialState: State = {
   user: null,
 }

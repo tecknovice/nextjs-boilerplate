@@ -5,7 +5,7 @@ interface Response<T> {
   error?: string
 }
 
-export default {
+const HttpClient = {
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<Response<T>> {
     try {
       const response = await axios.get<T>(url, config)
@@ -24,6 +24,8 @@ export default {
     }
   },
 }
+
+export default HttpClient
 
 function handleError<T>(error: any): Response<T> {
   if (error.response) {

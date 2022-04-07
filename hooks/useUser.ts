@@ -11,7 +11,6 @@ export default function useUser() {
   useEffect(() => {
     async function getProfile() {
       const response = await authService.getProfile()
-      console.log('res', response)
       if (response.data) {
         setUser(response.data)
         dispatch({ type: ActionTypes.CREATE, payload: response.data })

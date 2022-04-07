@@ -15,9 +15,7 @@ import { StateContext } from '../store/context'
 
 export default function SignUp() {
   const router = useRouter()
-  const {user} = React.useContext(StateContext);
-
-  console.log(user)
+  const { user } = React.useContext(StateContext)
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)

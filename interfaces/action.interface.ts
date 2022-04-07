@@ -1,7 +1,7 @@
-import { ActionTypes } from "./actionType.enum";
-import User from "./user.interface";
+import { ActionTypes } from './actionType.enum'
+import User from './user.interface'
 
 export interface Action {
-    type: ActionTypes
-    payload: User
+  type: ActionTypes
+  payload: User
 }

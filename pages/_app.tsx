@@ -3,11 +3,9 @@ import React, { ReactElement, ReactNode, useCallback, useEffect } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import axios from 'axios'
-import useUser from '../hooks/useUser'
 import { ContextProvider } from '../store/context'
 import Wrapper from '../components/wrapper'
 
-console.log('_app.tsx')
 axios.defaults.baseURL = 'http://localhost:3001'
 
 type NextPageWithLayout = NextPage & {
@@ -19,8 +17,6 @@ type AppPropsWithLayout = AppProps & {
 }
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  
-  
   if (typeof window !== 'undefined') {
     const jwt = localStorage.getItem('jwt')
     if (jwt) axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`
@@ -31,11 +27,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <ContextProvider>
-      {getLayout(
-        <Wrapper>
-          <Component {...pageProps} />
-        </Wrapper>
-      )}
+      <Wrapper>{getLayout(<Component {...pageProps} />)}</Wrapper>
     </ContextProvider>
   )
 }

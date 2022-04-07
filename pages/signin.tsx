@@ -23,7 +23,6 @@ function SignIn() {
   const router = useRouter()
 
   const { user } = useContext(StateContext)
-  console.log(user);
   const [credential, setCredential] = useState({
     email: '',
     password: '',
@@ -37,7 +36,7 @@ function SignIn() {
 
   useEffect(() => {
     if (user) router.push('/admin')
-  }, [user])
+  }, [user, router])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target

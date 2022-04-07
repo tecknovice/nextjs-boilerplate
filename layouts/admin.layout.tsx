@@ -26,7 +26,6 @@ import PeopleIcon from '@mui/icons-material/People'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import LayersIcon from '@mui/icons-material/Layers'
 import { useRouter } from 'next/router'
-import useUser from '../hooks/useUser'
 import { StateContext } from '../store/context'
 
 const drawerWidth = 240
@@ -122,10 +121,10 @@ function AdminLayout(props: AdminProps) {
   const router = useRouter()
 
   const { user } = React.useContext(StateContext)
-  // if (!user) router.push('/signin')
-  React.useEffect(() => {
-    if (!user) router.push('/signin')
-  }, [])
+  if (!user) router.push('/signin')
+  // React.useEffect(() => {
+  //   if (!user) router.push('/signin')
+  // }, [])
 
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
