@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { styled } from '@mui/material/styles'
+import { styled, createTheme } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
 import MuiDrawer from '@mui/material/Drawer'
 import Box from '@mui/material/Box'
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar'
@@ -10,25 +11,31 @@ import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
 import Badge from '@mui/material/Badge'
 import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
+import Paper from '@mui/material/Paper'
+import Link from '@mui/material/Link'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import NotificationsIcon from '@mui/icons-material/Notifications'
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'
-import Copyright from '../components/copyright'
-import { Button, CircularProgress, Popover } from '@mui/material'
-
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import PeopleIcon from '@mui/icons-material/People'
-import BarChartIcon from '@mui/icons-material/BarChart'
-import LayersIcon from '@mui/icons-material/Layers'
-import { useRouter } from 'next/router'
-import { StateContext } from '../store/context'
 
-const drawerWidth = 240
+function Copyright(props: any) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  )
+}
+
+const drawerWidth: number = 240
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean
@@ -52,9 +59,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }))
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
   '& .MuiDrawer-paper': {
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -78,78 +83,23 @@ const Drawer = styled(MuiDrawer, {
   },
 }))
 
-const menuItems = (
+const listItems = (
   <React.Fragment>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders" />
-    </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Customers" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItemButton>
-    <ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations" />
+      <ListItemText primary="Users" />
     </ListItemButton>
   </React.Fragment>
 )
 
-interface AdminProps {
-  children?: React.ReactNode
-}
-
-function AdminLayout(props: AdminProps) {
-  const router = useRouter()
-
-  const { user } = React.useContext(StateContext)
-  if (!user) router.push('/signin')
-  // React.useEffect(() => {
-  //   if (!user) router.push('/signin')
-  // }, [])
-
+export default function AdminDashboard({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = React.useState(true)
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const openPopover = Boolean(anchorEl)
-  const id = openPopover ? 'simple-popover' : undefined
-
-  // if (loading || error)
-  //   return (
-  //     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-  //       <CircularProgress />
-  //     </Box>
-  //   )
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="absolute" open={open}>
@@ -174,25 +124,10 @@ function AdminLayout(props: AdminProps) {
             Dashboard
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4}>
+            <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton aria-describedby={id} onClick={handleClick}>
-            <AccountCircleIcon />
-          </IconButton>
-          <Popover
-            id={id}
-            open={openPopover}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-          >
-            <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
-          </Popover>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -209,36 +144,26 @@ function AdminLayout(props: AdminProps) {
           </IconButton>
         </Toolbar>
         <Divider />
-        <List component="nav">{menuItems}</List>
+        <List component="nav">{listItems}</List>
       </Drawer>
       <Box
+        component="main"
         sx={{
           backgroundColor: (theme) =>
             theme.palette.mode === 'light' ? theme.palette.grey[100] : theme.palette.grey[900],
-          display: 'flex',
           flexGrow: 1,
-          flexDirection: 'column',
-          minHeight: '100vh',
+          height: '100vh',
           overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <Toolbar />
-        <Container component="main" maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          {props.children}
+        <Container maxWidth="lg" sx={{ flexGrow: 1, mt: 4, mb: 4 }}>
+          {children}
         </Container>
-        <Box
-          component="footer"
-          sx={{
-            py: 3,
-            px: 2,
-            mt: 'auto',
-          }}
-        >
-          <Copyright sx={{ pt: 4 }} />
-        </Box>
+        <Copyright sx={{ pt: 4 }} />
       </Box>
     </Box>
   )
 }
-
-export default AdminLayout

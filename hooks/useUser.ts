@@ -5,6 +5,7 @@ import authService from '../services/auth'
 import { DispatchContext } from '../store/context'
 
 export default function useUser() {
+  const [loading, setLoading] = useState<boolean>(true)
   const [user, setUser] = useState<User | null>(null)
   const [error, setError] = useState<string | null>(null)
   const dispatch = useContext(DispatchContext)
@@ -12,13 +13,16 @@ export default function useUser() {
     async function getProfile() {
       const response = await authService.getProfile()
       if (response.data) {
+        setLoading(false)
         setUser(response.data)
         dispatch({ type: ActionTypes.CREATE, payload: response.data })
       }
-      if (response.error) setError(response.error)
+      if (response.error) {
+        setLoading(false)
+        setError(response.error)
+      }
     }
     getProfile()
   }, [])
-  const loading = user === null && error === null ? true : false
   return { loading, user, error }
 }

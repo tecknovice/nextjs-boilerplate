@@ -4,25 +4,9 @@ import Header from '../components/header'
 import Footer from '../components/footer'
 import Box from '@mui/material/Box'
 
-const sections = [
-  { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  { title: 'Politics', url: '#' },
-  { title: 'Opinion', url: '#' },
-  { title: 'Science', url: '#' },
-  { title: 'Health', url: '#' },
-  { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' },
-]
-interface ClientProps {
-  children?: React.ReactNode
-}
-
-export default function ClientLayout(props: ClientProps) {
+export default function ClientLayout({ children }: { children?: React.ReactNode }) {
   return (
-    <Container
+    <Box
       sx={{
         display: 'flex',
         flexGrow: 1,
@@ -30,11 +14,11 @@ export default function ClientLayout(props: ClientProps) {
         minHeight: '100vh',
       }}
     >
-      <Header title="Website" sections={sections} />
-      <Box component="main" maxWidth="lg">
-        {props.children}
-      </Box>
+      <Header />
+      <Container component="main" sx={{ flexGrow: 1 }}>
+        {children}
+      </Container>
       <Footer title="Footer" description="Something here to give the footer a purpose!" />
-    </Container>
+    </Box>
   )
 }
