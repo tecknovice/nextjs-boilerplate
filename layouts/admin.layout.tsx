@@ -202,9 +202,7 @@ export default function AdminDashboard({ children }: { children: React.ReactNode
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ flexGrow: 1, mt: 4, mb: 4 }}>
-          {children}
-        </Container>
+        <Container sx={{ flexGrow: 1, mt: 4, mb: 4 }}>{children}</Container>
         <Copyright sx={{ pt: 4 }} />
       </Box>
     </Box>

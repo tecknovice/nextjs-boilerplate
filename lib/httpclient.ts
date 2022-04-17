@@ -23,6 +23,15 @@ export const HttpClient = {
       return handleError<T>(error)
     }
   },
+
+  async put<T>(url: string, params?: any, config?: AxiosRequestConfig): Promise<Response<T>> {
+    try {
+      const response = await axios.put<T>(url, params, config)
+      return { data: response.data }
+    } catch (error) {
+      return handleError<T>(error)
+    }
+  },
 }
 
 function handleError<T>(error: any): Response<T> {
