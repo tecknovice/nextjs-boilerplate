@@ -53,7 +53,7 @@ function SignIn() {
     const loginResponse = await AuthService.login(credential)
     if (loginResponse.data) {
       const userResponse = await UserService.getProfile(loginResponse.data.access_token)
-      if(userResponse.data){
+      if (userResponse.data) {
         dispatch({ type: ActionTypes.CREATE, payload: userResponse.data })
         router.push('/admin')
       }
