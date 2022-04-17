@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { styled } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer'
 import Box from '@mui/material/Box'
@@ -9,27 +9,26 @@ import List from '@mui/material/List'
 import Typography from '@mui/material/Typography'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
-import Badge from '@mui/material/Badge'
 import Container from '@mui/material/Container'
-import Link from '@mui/material/Link'
 import MenuIcon from '@mui/icons-material/Menu'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
-import NotificationsIcon from '@mui/icons-material/Notifications'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
 import PeopleIcon from '@mui/icons-material/People'
 import { useRouter } from 'next/router'
-import { StateContext } from '../store/context'
+import { DispatchContext, StateContext } from '../store/context'
 import { AccountCircle } from '@mui/icons-material'
 import { Menu, MenuItem } from '@mui/material'
+import Link from 'next/link'
+import AuthService from '../services/auth'
+import { ActionTypes } from '../interfaces/actionType.enum'
 
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link href="https://mui.com/">
+        <a>Your website</a>
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -91,7 +90,17 @@ const listItems = (
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
-      <ListItemText primary="Users" />
+      <Link href="/admin">
+        <a>Dashboard</a>
+      </Link>
+    </ListItemButton>
+    <ListItemButton>
+      <ListItemIcon>
+        <PeopleIcon />
+      </ListItemIcon>
+      <Link href="/admin/users">
+        <a>Users</a>
+      </Link>
     </ListItemButton>
   </React.Fragment>
 )
@@ -99,6 +108,7 @@ const listItems = (
 export default function AdminDashboard({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const { user } = useContext(StateContext)
+  const dispatch = useContext(DispatchContext)
   if (!user) router.push('/signin')
 
   const [open, setOpen] = useState(true)
@@ -114,13 +124,19 @@ export default function AdminDashboard({ children }: { children: React.ReactNode
   const handleClose = () => {
     setAnchorEl(null)
   }
-  
+
   const handleProfile = () => {
     router.push('/admin/profile')
     setAnchorEl(null)
   }
 
-  const handleSignout = () => {
+  const handleSignout = async () => {
+    const response = await AuthService.logout()
+    if (response.data) {
+      dispatch({ type: ActionTypes.DELETE })
+      router.push('/signin')
+      return
+    }
     setAnchorEl(null)
   }
 

@@ -16,7 +16,10 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+console.log('outside App')
+
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
+  console.log('inside App')
   if (typeof window !== 'undefined') {
     const jwt = localStorage.getItem('jwt')
     if (jwt) axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`

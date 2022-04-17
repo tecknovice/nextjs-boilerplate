@@ -3,5 +3,5 @@ import User from './user.interface'
 
 export interface Action {
   type: ActionTypes
-  payload: User
+  payload?: User
 }

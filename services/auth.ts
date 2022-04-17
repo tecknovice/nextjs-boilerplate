@@ -11,6 +11,13 @@ const AuthService = {
     }
     return response
   },
+  async logout() {
+    const response = await HttpClient.post<any>('/auth/logout')
+    if (response.data) {
+      localStorage.removeItem('jwt')
+    }
+    return response
+  },
 }
 
 export default AuthService
