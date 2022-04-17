@@ -16,21 +16,15 @@ export default function UserForm({
   const {
     control,
     reset,
-    setValue,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm<User>({
-    defaultValues: user ?? { id: 0, name: '', email: '', password: '', passwordConfirm: '' },
+    defaultValues: user ?? { id: 0, name: '', email: '', passwordConfirm: '', password: '' },
   })
 
   useEffect(() => {
-    reset()
-    setValue('id', user?.id)
-    setValue('name', user?.name)
-    setValue('email', user?.email)
-    setValue('password', user?.password)
-    setValue('passwordConfirm', user?.password)
-  }, [reset, setValue, user])
+    reset({ ...user, passwordConfirm: user?.password })
+  }, [reset, user])
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -44,7 +38,7 @@ export default function UserForm({
           />
           <Controller
             control={control}
-            rules={{ required: true }}
+            rules={{ required: true, pattern: /\S+@\S+\.\S+/ }}
             name="email"
             render={({ field }) => <TextField required fullWidth id="email" label="email" {...field} />}
           />
