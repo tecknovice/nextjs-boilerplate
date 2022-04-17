@@ -1,10 +1,16 @@
+import { Token } from '../interfaces/token.interface'
 import User from '../interfaces/user.interface'
-import httpclient from '../lib/httpclient'
+import { HttpClient } from '../lib/httpclient'
 import { sleep } from '../lib/sleep'
 
-export default {
-  async getProfile() {
-    const response = await httpclient.get<User>('/auth/profile')
+const AuthService = {
+  async login(user: User) {
+    const response = await HttpClient.post<Token>('/auth/login', user)
+    if (response.data) {
+      localStorage.setItem('jwt', response.data.access_token)
+    }
     return response
   },
 }
+
+export default AuthService

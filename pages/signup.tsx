@@ -8,14 +8,12 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import Copyright from '../components/copyright'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import { StateContext } from '../store/context'
 
 export default function SignUp() {
   const router = useRouter()
-  const { user } = React.useContext(StateContext)
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
@@ -87,7 +85,6 @@ export default function SignUp() {
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 5 }} />
     </Container>
   )
 }

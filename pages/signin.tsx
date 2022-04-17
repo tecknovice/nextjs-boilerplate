@@ -8,22 +8,22 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import Copyright from '../components/copyright'
 import { useState, useEffect, useContext } from 'react'
-import httpClient from '../lib/httpclient'
 import Alert from '@mui/material/Alert'
 import { useRouter } from 'next/router'
-import { StateContext } from '../store/context'
-
-interface Token {
-  access_token: string
-}
+import { DispatchContext, StateContext } from '../store/context'
+import AuthService from '../services/auth'
+import User from '../interfaces/user.interface'
+import { ActionTypes } from '../interfaces/actionType.enum'
+import UserService from '../services/user'
 
 function SignIn() {
   const router = useRouter()
-
   const { user } = useContext(StateContext)
-  const [credential, setCredential] = useState({
+  if (user) router.push('/admin')
+
+  const dispatch = useContext(DispatchContext)
+  const [credential, setCredential] = useState<User>({
     email: '',
     password: '',
   })
@@ -33,10 +33,6 @@ function SignIn() {
     email: '',
     password: '',
   })
-
-  useEffect(() => {
-    if (user) router.push('/admin')
-  }, [user, router])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target
@@ -51,18 +47,18 @@ function SignIn() {
     }
     setCredential({ ...credential, [name]: value })
   }
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const response = await httpClient.post<Token>('/auth/login', {
-      email: credential.email,
-      password: credential.password,
-    })
-    if (response.data) {
-      localStorage.setItem('jwt', response.data.access_token)
-      router.push('/admin')
-    } else if (response.error) {
-      setErrors({ ...errors, auth: response.error })
+    const loginResponse = await AuthService.login(credential)
+    if (loginResponse.data) {
+      const userResponse = await UserService.getProfile(loginResponse.data.access_token)
+      if(userResponse.data){
+        dispatch({ type: ActionTypes.CREATE, payload: userResponse.data })
+        router.push('/admin')
+      }
     }
+    if (loginResponse.error) setErrors({ ...errors, auth: loginResponse.error })
   }
 
   const handleCloseAlert = () => {
@@ -115,6 +111,7 @@ function SignIn() {
             error={Boolean(errors.password)}
             helperText={!!errors.password && errors.password}
           />
+          <Typography>{errors.password}</Typography>
           {errors.auth && (
             <Alert severity="error" onClose={handleCloseAlert}>
               {errors.auth}
@@ -131,7 +128,7 @@ function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="/forgot-password" variant="body2">
+              <Link href="/forget-password" variant="body2">
                 Forgot password?
               </Link>
             </Grid>
@@ -143,7 +140,6 @@ function SignIn() {
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   )
 }
