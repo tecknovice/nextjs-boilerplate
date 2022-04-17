@@ -21,6 +21,8 @@ import ListItemText from '@mui/material/ListItemText'
 import PeopleIcon from '@mui/icons-material/People'
 import { useRouter } from 'next/router'
 import { StateContext } from '../store/context'
+import { AccountCircle } from '@mui/icons-material'
+import { Menu, MenuItem } from '@mui/material'
 
 function Copyright(props: any) {
   return (
@@ -104,6 +106,24 @@ export default function AdminDashboard({ children }: { children: React.ReactNode
     setOpen(!open)
   }
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+  
+  const handleProfile = () => {
+    router.push('/admin/profile')
+    setAnchorEl(null)
+  }
+
+  const handleSignout = () => {
+    setAnchorEl(null)
+  }
+
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="absolute" open={open}>
@@ -115,7 +135,6 @@ export default function AdminDashboard({ children }: { children: React.ReactNode
           <IconButton
             edge="start"
             color="inherit"
-            aria-label="open drawer"
             onClick={toggleDrawer}
             sx={{
               marginRight: '36px',
@@ -127,11 +146,15 @@ export default function AdminDashboard({ children }: { children: React.ReactNode
           <Typography component="h1" variant="h6" color="inherit" noWrap sx={{ flexGrow: 1 }}>
             Dashboard
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <div>
+            <IconButton size="large" onClick={handleMenu} color="inherit">
+              <AccountCircle />
+            </IconButton>
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+              <MenuItem onClick={handleProfile}>Profile</MenuItem>
+              <MenuItem onClick={handleSignout}>Sign out</MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
